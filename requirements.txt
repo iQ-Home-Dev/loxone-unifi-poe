@@ -12,7 +12,6 @@ MarkupSafe==3.0.2
 pytz==2025.2
 requests==2.32.4
 six==1.17.0
-unifi_poe @ file:///Users/markus/Desktop/Projects/loxone-unifi-poe/unifi_poe
 urllib3==2.5.0
 waitress==3.0.2
 Werkzeug==3.1.3

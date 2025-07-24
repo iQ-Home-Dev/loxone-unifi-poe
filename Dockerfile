@@ -6,6 +6,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY unifi_poe/unifi.py unifi_poe/unifi.py
+COPY unifi_poe/__init__.py unifi_poe/__init__.py
 COPY loxone-unifi-poe.py loxone-unifi-poe.py
 
 CMD [ "python", "./loxone-unifi-poe.py" ]
