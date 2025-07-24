@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY data data/
-COPY bin/loxone-unifi-poe.py bin/loxone-unifi-poe.py
+COPY unifi_poe/unifi.py unifi_poe/unifi.py
+COPY loxone-unifi-poe.py loxone-unifi-poe.py
 
-CMD [ "python", "./bin/loxone-unifi-poe.py" ]
+CMD [ "python", "./loxone-unifi-poe.py" ]
