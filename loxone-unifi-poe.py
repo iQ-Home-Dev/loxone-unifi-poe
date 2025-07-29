@@ -72,17 +72,17 @@ def main():
                             help='enable verbose logging level')
 
     parser.add_argument('--host',
-                            required=True,
+                            required=False,
                             action='store',
                             default="0.0.0.0",
                             help='the url of the unifi controller')
     parser.add_argument('--username',
-                            required=True,
+                            required=False,
                             action='store',
                             default="default",
                             help='username to access the Unifi api')   
     parser.add_argument('--password',
-                            required=True,
+                            required=False,
                             action='store',
                             default="default",
                             help='password to access the Unifi api')   
@@ -97,7 +97,7 @@ def main():
                             default="udm",
                             help='unifi controller type: udm or unifi_controller')   
     parser.add_argument('--switch-mac',
-                            required=True,
+                            required=False,
                             action='store',
                             default="00:00:00:00:00:00",
                             help='mac address of the switch who\'s port you wish to control')      
@@ -130,6 +130,11 @@ def main():
     switch_mac      = os.getenv("UNIFI_SWITCH_MAC", args.switch_mac)
     switch_port     = int(os.getenv("UNIFI_SWITCH_PORT", args.switch_port))
     
+    # parameter check
+    if host == "0.0.0.0" or username == "default" or password == "default" or switch_mac == "00:00:00:00:00:00":
+        logging.error("host, username, password and switch_mac must be specified")
+        sys.exit(-1)
+
     # set logging format and level
     if verbose:
         logging.basicConfig(stream=sys.stdout, level=logging.NOTSET, format='%(asctime)-15s %(message)s')
