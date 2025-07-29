@@ -14,8 +14,9 @@ from waitress import serve
 from unifi_poe.unifi import UnifiApi, UnifiControllerType, UnifiPoEMode
 
 
-def poe_mode_set(mode):
-    switch_mac, switch_port, api = ctx
+def poe_mode_set(mode, port):
+    switch_port = int(port)
+    switch_mac, api = ctx
     switch_info = api.get_switch_info(switch_mac)
     existing_overrides = switch_info["port_overrides"]
 
@@ -34,24 +35,24 @@ def poe_mode_set(mode):
 
 class port_on(Resource):
     def get(self, port):
-        poe_mode_set(UnifiPoEMode.auto)
+        poe_mode_set(UnifiPoEMode.auto, port)
         return({"port": "switched on"})
 
 class port_off(Resource):
     def get(self, port):
-        poe_mode_set(UnifiPoEMode.off)
+        poe_mode_set(UnifiPoEMode.off, port)
         return({"port": "switched off"})
 
 class port_cycle(Resource):
     def get(self, port):
-            switch_mac, switch_port, api = ctx
+            switch_mac, api = ctx
             api.request(
                 "/cmd/devmgr",
                 method="POST",
                 data={
                     "cmd": "power-cycle",
                     "mac": switch_mac,
-                    "port_idx": switch_port,
+                    "port_idx": port,
                 },
             )
             return({"port": "power cycled"})
@@ -101,7 +102,7 @@ def main():
                             default="00:00:00:00:00:00",
                             help='mac address of the switch who\'s port you wish to control')      
     parser.add_argument('--switch-port',
-                            required=True,
+                            required=False,
                             action='store',
                             default="0",
                             help='the port on the switch you wish to control')     
@@ -148,7 +149,6 @@ def main():
     # create context for flask handler
     ctx = (
         switch_mac,
-        switch_port,
         UnifiApi(
             host,
             username,
